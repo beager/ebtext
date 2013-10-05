@@ -1,0 +1,32 @@
+.main {
+	margin: 0px auto;
+	width: 456px;
+}
+
+.stage {
+	width: 456px;
+	height: 192px;
+	position: relative;
+}
+
+.loader {
+	position: absolute;
+	width: 456px;
+	height: 192px;
+}
+
+#image {
+	position: absolute;
+}
+
+#bitmap {
+	display: none;
+}
+
+.loader.loading {
+	background: url(../images/ajax-loader.gif) no-repeat 50% 50%;
+}
+
+form {
+	padding-top: 1em;
+}

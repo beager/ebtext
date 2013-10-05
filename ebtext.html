@@ -1,10 +1,8 @@
 <html>
 <head>
+  <link rel="stylesheet" type="text/css" href="styles/main.css" />
   <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-  <script src="lib/b64.js"></script>
-  <script src="lib/LZWEncoder.js"></script>
-  <script src="lib/NeuQuant.js"></script>
-  <script src="lib/GIFEncoder.js"></script>
+  <script src="lib/gif.js/gif.js"></script>
   <script>
   $(document).ready(function() {
     var canvas = document.getElementById('bitmap');
@@ -36,12 +34,20 @@
 
     $('#generate').click(function() {
 
-      var encoder = new GIFEncoder();
-      encoder.setRepeat(0); //auto-loop
-      encoder.setDelay(text_print_delay);
+      $('.loader').addClass('loading');
+      document.getElementById('image').src = '';
+
+
+      var encoder = new GIF({
+        workers: 8,
+        quality: 10,
+        height: c_height,
+        width: c_width,
+        workerScript: 'lib/gif.js/gif.worker.js',
+        background: '#000'
+      });
       canvas.width = c_width;
       canvas.height = c_height;
-      encoder.setSize(c_width,c_height);
 
       var lines = [
         $('[name=line1]').val(),
@@ -50,18 +56,15 @@
       ];
 
       var total_length = 0;
-      var pct_done = 0;
       for (idx in lines) {
         total_length += lines[idx].length;
       }
 
-      encoder.start();
-
       context.mozImageSmoothingEnabled = false;
       context.webkitImageSmoothingEnabled = false;
 
-      context.fillStyle = "rgb(255,255,255)";  
-      context.fillRect(0,0,canvas.width, canvas.height); //GIF can't do transparent so do white
+      context.fillStyle = "rgba(255,255,255,1)";  
+      context.fillRect(0,0,canvas.width, canvas.height);
 
       var frame = 0;
 
@@ -76,13 +79,10 @@
           }
           drawLine(lines[idx].substring(0, j), idx);
 
-          encoder.addFrame(context);
-          pct_done = ++frame / total_length * 100;
-          $("#thing").html(pct_done + '%');
+          encoder.addFrame(context, {copy: true, delay: text_print_delay});
         }
       }
 
-      encoder.setDelay(150);
       for (var dlp = 0; dlp < 19; dlp++) {
         context.drawImage(textbox.vanilla, 0, 0, c_width, c_height);
         drawLine(lines[0], 0);
@@ -93,13 +93,16 @@
         } else {
           context.drawImage(textbox.arrow_sm, 136 * coeff, 56.10 * coeff, 16 * coeff, 8 * coeff);
         }
-        encoder.addFrame(context);
+        encoder.addFrame(context, {copy: true, delay: 150});
       }
 
 
-      encoder.finish();
-      document.getElementById('image').src = 'data:image/gif;base64,'+encode64(encoder.stream().getData())
-
+      encoder.on('finished', function(blob) {
+        document.getElementById('image').src = URL.createObjectURL(blob);
+        $('.loader').removeClass('loading');
+      });
+      
+      encoder.render();
 
       return false;   
     });
@@ -233,23 +236,27 @@
   </script>
 </head>
 <body>
-  <canvas id="bitmap" style="display:none"></canvas>
-  <div>
-    <p id="thing"></p>
+  <div class="main">
+      <div class="stage">
+      <div class="loader">
+      </div>
+      <canvas id="bitmap"></canvas>
+      <img id="image">
+    </div>
+
+    <form>
+      <fieldset>
+        <label for="line1">Line 1</label>
+        <input type="text" maxlength="30" name="line1" />
+        <br />
+        <label for="line1">Line 2</label>
+        <input type="text" maxlength="30" name="line2" />
+        <br />
+        <label for="line1">Line 3</label>
+        <input type="text" maxlength="30" name="line3" />
+        <button id="generate">Generate</button>
+      </fieldset>
+    </form>
   </div>
-  <img id="image">
-  <form>
-    <fieldset>
-      <label for="line1">Line 1</label>
-      <input type="text" maxlength="30" name="line1" />
-      <br />
-      <label for="line1">Line 2</label>
-      <input type="text" maxlength="30" name="line2" />
-      <br />
-      <label for="line1">Line 3</label>
-      <input type="text" maxlength="30" name="line3" />
-      <button id="generate">Generate</button>
-    </fieldset>
-  </form>
-</body>
+  </body>
 </html>
