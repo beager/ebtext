@@ -2,11 +2,13 @@ body {
 	background: #000;
 }
 
-.container {
+.contain {
 	background: url(../images/pagebg.png) repeat 0 0;
-	margin: 0px auto;
-	height: 640px;
+	border-radius: 8px;
+	margin: 16px auto;
+	min-height: 640px;
 	width: 560px;
+	padding-bottom: 16px;
 	position: relative;
 }
 
@@ -17,8 +19,8 @@ body {
 
 .stage {
 	width: 456px;
-	height: 192px;
-	padding: 1em 0;
+	height: 224px;
+	padding-top:16px;
 	position: relative;
 }
 
@@ -40,16 +42,7 @@ body {
 	background: url(../images/ajax-loader.gif) no-repeat 50% 50%;
 }
 
-form {
-	background: rgba(255,255,255,.8);
-	padding-top: 1em;
-}
-
-fieldset {
-	border: 0px none;
-}
-
-textarea {
-	width: 430px;
-	height: 150px;
+.solid {
+	background: rgba(255,255,255,.9);
+	border-radius: 8px;
 }

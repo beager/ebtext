@@ -1,43 +1,96 @@
 <html>
 <head>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="styles/main.css" />
   <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
   <script src="../gif.js/dist/gif.js"></script>
   <script src="lib/ebtext.js"></script>
 </head>
 <body>
-  <div class="container">
+  <div class="contain">
     <div class="main">
-        <div class="stage">
+      <div class="stage">
         <div class="loader">
         </div>
         <canvas id="bitmap"></canvas>
-        <img id="image">
+        <img id="image" src="images/splash.gif" />
       </div>
 
-      <form>
-        <fieldset>
-          <textarea id="text" name="text"></textarea><br />
-          <label for="flavor">Flavor</label>
-          <!--
-          <select name="flavor" id="flavor">
-            <option value="plain">Plain</option>
-            <option value="mint">Mint</option>
-            <option value="strawberry">Strawberry</option>
-            <option value="peanut">Peanut</option>
-            <option value="banana">Banana</option>
-            <option value="wounded">Wounded</option>
-          </select><br />
-          -->
-          <label for="speed">Speed</label>
-          <select name="speed" id="speed">
-            <option value="15">Fast</option>
-            <option value="33">Medium</option>
-            <option value="50">Slow</option>
-          </select><br />
-          <button id="generate">Generate</button>
-        </fieldset>
-      </form>
+      <div class="container solid">
+        <ul id="tabs" class="nav nav-tabs">
+          <li class="active"><a href="#home" data-toggle="tab">Make text</a></li>
+          <li><a href="#help" data-toggle="tab">Help</a></li>
+          <li><a href="#about" data-toggle="tab">About</a></li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="home">
+            <form>
+              <fieldset>
+                <label for="text">Input Text</label>
+                <textarea id="text" name="text" class="form-control" rows="3"></textarea><br />
+                <!--
+                <label for="flavor">Flavor</label>
+                <select name="flavor" id="flavor">
+                  <option value="plain">Plain</option>
+                  <option value="mint">Mint</option>
+                  <option value="strawberry">Strawberry</option>
+                  <option value="peanut">Peanut</option>
+                  <option value="banana">Banana</option>
+                  <option value="wounded">Wounded</option>
+                </select><br />
+                -->
+                <label for="speed">Text Speed</label>
+                <div class="btn-group" data-toggle="buttons">
+                  <label class="btn btn-primary active">
+                    <input type="radio" name="speed" checked="checked" value="15" />Fast
+                  </label>
+                  <label class="btn btn-primary">
+                    <input type="radio" name="speed" id="option2" value="33" />Medium
+                  </label>
+                  <label class="btn btn-primary">
+                    <input type="radio" name="speed" id="option3" value="50" />Slow
+                  </label>
+                </div><br /><br />
+                <button id="generate" class="btn btn-default">Generate</button>
+              </fieldset>
+            </form>
+          </div>
+          <div class="tab-pane" id="help">
+            <h1>EarthBound Text Help</h1>
+
+            <h2>Input Text</h2>
+            <p>This is the input text, where you put in what you want to have show up in an EarthBound text box.</p>
+
+            <h2>Text Speed</h2>
+            <p>This changes the text speed. Your options are Fast, Medium, and Slow. These settings have been rigorously tested to match the pacing of the original game as closely as possible.</p>
+
+            <h2>Flavor</h2>
+            <p class="text-warning">Coming Soon</p>
+            <p>This will change the text flavor to one of the flavors available in the game.</p>
+
+            <h2>Control Codes</h2>
+            <p>EarthBound Text easy. Control codes are interpreted inline and delimited by square brackets ([]). Unknown or irrelevant control codes are dropped automatically. This is meant to provide an easy mechanism to import text from the <a href="http://starmen.net/mother2/gameinfo/script/script.txt" target="_blank">EarthBound Text Dump</a> very easily.</p>
+            <dl>
+              <dt>[LINE]</dt>
+              <dd>This adds a newline.</dd>
+              <dt>[DELAY {0x}]</dt>
+              <dd>This adds a delay in hex form. 01 = short, 0F = longer, FF = you'll be waiting a while.</dd>
+              <dt>[PAUSE]</dt>
+              <dd>This adds a pause. The arrow will flash for a moment, then will continue. Meant to emulate a point in the text when you need to press &lt;A&gt;.</dd>
+              <dt>@</dt>
+              <dd>This adds a &middot; to the start of a line.</dd>
+            </dl>
+          </div>
+          <div class="tab-pane" id="about">
+            <h1>About</h1>
+            <p>EarthBound Text written by <a href="http://www.billeager.com" target="_blank">Bill Eager</a>. Uses <a href="https://github.com/jnordberg/gif.js" target="_blank">gif.js</a> technology by Johan Nordberg.</p>
+            <p>This project is not affiliated with Shigesato Itoi, Nintendo, HAL Laboratories, or anyone.</p>
+            <h2>Source code</h2>
+            <p><a href="http://github.com/beager/ebtext/" target="_blank">Source code</a> is available on GitHub, contributions welcome.</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   </body>
