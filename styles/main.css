@@ -30,3 +30,12 @@
 form {
 	padding-top: 1em;
 }
+
+fieldset {
+	border: 0px none;
+}
+
+textarea {
+	width: 430px;
+	height: 150px;
+}
