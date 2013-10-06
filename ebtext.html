@@ -2,7 +2,7 @@
 <head>
   <link rel="stylesheet" type="text/css" href="styles/main.css" />
   <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-  <script src="lib/gif.js/gif.js"></script>
+  <script src="../gif.js/dist/gif.js"></script>
   <script src="lib/ebtext.js"></script>
 </head>
 <body>
@@ -16,7 +16,24 @@
 
     <form>
       <fieldset>
-        <textarea id="text" name="text"></textarea>
+        <textarea id="text" name="text"></textarea><br />
+        <label for="flavor">Flavor</label>
+        <!--
+        <select name="flavor" id="flavor">
+          <option value="plain">Plain</option>
+          <option value="mint">Mint</option>
+          <option value="strawberry">Strawberry</option>
+          <option value="peanut">Peanut</option>
+          <option value="banana">Banana</option>
+          <option value="wounded">Wounded</option>
+        </select><br />
+        -->
+        <label for="speed">Speed</label>
+        <select name="speed" id="speed">
+          <option value="15">Fast</option>
+          <option value="33">Medium</option>
+          <option value="50">Slow</option>
+        </select><br />
         <button id="generate">Generate</button>
       </fieldset>
     </form>
