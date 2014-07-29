@@ -6,6 +6,34 @@
   <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
   <script src="gif.js/dist/gif.js"></script>
   <script src="lib/ebtext.js"></script>
+  <script>
+    $(document).ready(function() {
+      EarthboundText.preload_assets();
+
+      $('#tabs a').click(function (e) {
+        e.preventDefault()
+        $(this).tab('show')
+      })
+
+      $('#generate').click(function (e) {
+        e.preventDefault();
+        $('.loader').addClass('loading');
+        document.getElementById('image').src = '';
+
+        EarthboundText.render({
+          canvas: document.getElementById('bitmap'),
+          flavor: $('input:radio[name=flavor]:checked').val(),
+          speed: $('input:radio[name=speed]:checked').val(),
+          text: $('#text').val(),
+          on_render: function(blob) {
+            $('#image').attr('src', URL.createObjectURL(blob));
+            $('.loader').removeClass('loading');
+          }
+        });
+      });
+    });
+  </script>
+  <title>EarthBound Text Generator</title>
 </head>
 <body>
   <div class="contain">
