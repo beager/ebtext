@@ -7,26 +7,26 @@ body {
 	border-radius: 8px;
 	margin: 16px auto;
 	min-height: 640px;
-	width: 560px;
+	width: 712px;
 	padding-bottom: 16px;
 	position: relative;
 }
 
 .main {
 	margin: 1em auto;
-	width: 456px;
+	width: 608px;
 }
 
 .stage {
-	width: 456px;
-	height: 224px;
+	width: 608px;
+	height: 282px;
 	padding-top:16px;
 	position: relative;
 }
 
 .loader {
 	position: absolute;
-	width: 456px;
+	width: 608px;
 	height: 192px;
 }
 
