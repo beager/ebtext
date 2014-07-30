@@ -165,6 +165,64 @@ var EarthboundText = {
       this.encoder.render();
     },
 
+    preprocess_text: function() {
+      var new_text = '';
+      var posx = 0;
+      var current_word = '';
+      var xlimit = 132;
+      var word_boundary = false;
+      var to_insert = '';
+
+      for (var i = 0; i < text.length; i++) {
+        to_insert = '';
+        switch(text[i]) {
+          case '[':
+            var cmd = '';
+            while (text[++i] != ']') {
+              cmd += text[i];
+            }
+            var args = cmd.split(' ');
+            if (args[0] == 'LINE') {
+              posx = 0;
+            }
+            to_insert += '[' + cmd + ']';
+            word_boundary = true;
+          case ' ':
+            posx += 2;
+            word_boundary = true;
+            break;
+          case '@':
+            posx -= 6; // neat little terrible hack
+          default:
+            current_word += text[i];
+        }
+        if (word_boundary) {
+            nextLength = calc_word_length(current_word);
+            if (posx + nextLength > xlimit) {
+              out_text += '[LINE]';
+              posx = 0;
+            }
+            posx += nextLength;
+            out_text += current_word + ' ';
+            current_word = '';
+            word_boundary = false;
+        }
+        out_text += to_insert;
+      }
+      if (current_word != '') {
+        out_text += current_word;
+      }
+      return out_text;
+    },
+
+    calc_word_length: function(word) {
+      width = 0;
+      for (var i = 0; i < word.length; i++) {
+        width += get_glyph_len(word[i]);
+      }
+      return width;
+    },
+
     render_dialog: function() {
       var last_command = '';
 
@@ -327,7 +385,7 @@ var EarthboundText = {
       if (combo = get_glyph_location(name)) {
         return combo.w;
       }
-      return false;
+      return 0;
     },
 
     preload_image: function(url) {
