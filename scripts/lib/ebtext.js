@@ -144,7 +144,7 @@ var EarthboundText = {
         quality: this.encoder_quality,
         height: this.dialog_height,
         width: this.dialog_width,
-        workerScript: 'gif.js/dist/gif.worker.js',
+        workerScript: 'scripts/3rdparty/gif.js/dist/gif.worker.js',
         background: this.encoder_background,
         transparent: this.encoder_transparent
       });  
@@ -247,9 +247,9 @@ var EarthboundText = {
       // If we're in a pause, we want to draw the pause arrow too.
       if (pause) {
         if (pause % 2 == 1) {
-          this.get_context().drawImage(this.asset('arrowbig'), dialog_width - 64, dialog_height - 32, 64, 32);
+          this.get_context().drawImage(this.asset('arrowbig'), this.dialog_width - 64, this.dialog_height - 32, 64, 32);
         } else {
-          this.get_context().drawImage(this.asset('arrowsm'), dialog_width - 64, dialog_height - 32, 64, 32);
+          this.get_context().drawImage(this.asset('arrowsm'), this.dialog_width - 64, this.dialog_height - 32, 64, 32);
         }
       }
 
