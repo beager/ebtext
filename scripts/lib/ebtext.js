@@ -161,15 +161,17 @@ var EarthboundText = {
 
     render: function(opts) {
       this.initialize(opts);
+      this.preprocess_text();
       this.render_dialog();
       this.encoder.render();
     },
 
     preprocess_text: function() {
-      var new_text = '';
+      var text = this.input_text;
+      var out_text = '';
       var posx = 0;
       var current_word = '';
-      var xlimit = 132;
+      var xlimit = 120;
       var word_boundary = false;
       var to_insert = '';
 
@@ -197,12 +199,12 @@ var EarthboundText = {
             current_word += text[i];
         }
         if (word_boundary) {
-            nextLength = calc_word_length(current_word);
-            if (posx + nextLength > xlimit) {
+            next_length = this.calc_word_length(current_word);
+            if (posx + next_length > xlimit) {
               out_text += '[LINE]';
               posx = 0;
             }
-            posx += nextLength;
+            posx += next_length;
             out_text += current_word + ' ';
             current_word = '';
             word_boundary = false;
@@ -212,13 +214,13 @@ var EarthboundText = {
       if (current_word != '') {
         out_text += current_word;
       }
-      return out_text;
+      this.input_text = out_text;
     },
 
     calc_word_length: function(word) {
       width = 0;
       for (var i = 0; i < word.length; i++) {
-        width += get_glyph_len(word[i]);
+        width += this.get_glyph_len(word[i]);
       }
       return width;
     },
@@ -382,7 +384,7 @@ var EarthboundText = {
 
     get_glyph_len: function(name) {
       var combo = false;
-      if (combo = get_glyph_location(name)) {
+      if (combo = this.get_glyph_location(name)) {
         return combo.w;
       }
       return 0;
