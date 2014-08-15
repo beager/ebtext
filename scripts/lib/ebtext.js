@@ -189,8 +189,14 @@ var EarthboundText = {
             }
             to_insert += '[' + cmd + ']';
             word_boundary = true;
+            break;
           case ' ':
             posx += 2;
+            word_boundary = true;
+            to_insert += ' ';
+            break;
+          case "\n":
+            to_insert += '[LINE]';
             word_boundary = true;
             break;
           case '@':
@@ -205,7 +211,7 @@ var EarthboundText = {
               posx = 0;
             }
             posx += next_length;
-            out_text += current_word + ' ';
+            out_text += current_word;
             current_word = '';
             word_boundary = false;
         }
@@ -227,6 +233,8 @@ var EarthboundText = {
 
     render_dialog: function() {
       var last_command = '';
+
+      this.draw_frame(); // first frame is empty box
 
       var should_draw = false;
       for (var i = 0; i < this.input_text.length; i++) {
@@ -251,6 +259,7 @@ var EarthboundText = {
               case 'PAUSE':
                 this.add_pause();
                 last_command = 'PAUSE';
+                should_draw = false;
                 break;
               default:
                 should_draw = false;
