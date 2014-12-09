@@ -166,7 +166,17 @@ var EarthboundText = {
       this.encoder.render();
     },
 
+    preprocess_text_simple: function() {
+      var text = this.input_text;
+      text = text.replace(/^/gi, '@');
+      text = text.replace(/\n+/gi, '[PAUSE][LINE]@');
+      text = text.replace(/@+/gi, '@');
+      text = text.replace(/\\/gi, '[DELAY 08]');
+      this.input_text = text;
+    },
+
     preprocess_text: function() {
+      this.preprocess_text_simple();
       var text = this.input_text;
       var out_text = '';
       var posx = 0;
@@ -380,7 +390,7 @@ var EarthboundText = {
     },
 
     get_glyph_location: function(name) {
-      if (!name in this.glyph_locations) {
+      if (!(name in this.glyph_locations)) {
         return false;
       }
       var array = this.glyph_locations[name];
