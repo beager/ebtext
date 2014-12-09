@@ -168,8 +168,8 @@ var EarthboundText = {
 
     preprocess_text_simple: function() {
       var text = this.input_text;
-      text = text.replace(/^/gi, '@');
-      text = text.replace(/\n+/gi, '[PAUSE][LINE]@');
+      text = text.replace(/^[\s]*/gi, '@');
+      text = text.replace(/\n+[\s]*/gi, '[PAUSE][LINE]@');
       text = text.replace(/@+/gi, '@');
       text = text.replace(/\\/gi, '[DELAY 08]');
       this.input_text = text;
