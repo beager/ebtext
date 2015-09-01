@@ -3,35 +3,9 @@
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="styles/main.css" />
   <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
   <script src="scripts/3rdparty/gif.js/dist/gif.js"></script>
-  <script src="scripts/lib/ebtext.js"></script>
+  <script src="scripts/bundle.js"></script>
   <script>
-    $(document).ready(function() {
-      EarthboundText.preload_assets();
-
-      $('#tabs a').click(function (e) {
-        e.preventDefault()
-        $(this).tab('show')
-      })
-
-      $('#generate').click(function (e) {
-        e.preventDefault();
-        $('.loader').addClass('loading');
-        document.getElementById('image').src = '';
-
-        EarthboundText.render({
-          canvas: document.getElementById('bitmap'),
-          flavor: $('input:radio[name=flavor]:checked').val(),
-          speed: $('input:radio[name=speed]:checked').val(),
-          text: $('#text').val(),
-          on_render: function(blob) {
-            $('#image').attr('src', URL.createObjectURL(blob));
-            $('.loader').removeClass('loading');
-          }
-        });
-      });
-    });
   </script>
   <title>EarthBound Text Labs</title>
 </head>
