@@ -24,6 +24,21 @@ body {
 	position: relative;
 }
 
+.actions {
+	position: absolute;
+	bottom: 0;
+	visibility: hidden;
+	right: 0;
+	margin: 34px 24px;
+	opacity: 0;
+	transition: all .14s ease-in-out;
+}
+
+.stage:hover .actions {
+	visibility: visible;
+	opacity: 1;
+}
+
 .loader {
 	position: absolute;
 	width: 608px;

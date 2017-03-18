@@ -155,6 +155,7 @@ var EarthboundText = {
         this.context = this.canvas.getContext('2d');
         this.context.mozImageSmoothingEnabled = false;
         this.context.webkitImageSmoothingEnabled = false;
+        this.context.imageSmoothingEnabled = false;
       }
       return this.context;
     },

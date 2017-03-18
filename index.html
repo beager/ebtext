@@ -1,136 +1,195 @@
 <html>
 <head>
-  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="styles/main.css" />
-  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-  <script src="scripts/3rdparty/gif.js/dist/gif.js"></script>
-  <script src="scripts/lib/ebtext.js"></script>
-  <script>
-    $(document).ready(function() {
-      EarthboundText.preload_assets();
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="styles/main.css" />
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="scripts/3rdparty/gif.js/dist/gif.js"></script>
+    <script src="scripts/lib/ebtext.js"></script>
+    <script>
+        $(document).ready(function() {
+            var saveData = (function () {
+                var a = document.createElement("a");
+                document.body.appendChild(a);
+                a.style = "display: none";
+                return function (blob, fileName) {
+                    var url = window.URL.createObjectURL(blob);
+                    a.href = url;
+                    a.download = fileName;
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                };
+            }());
 
-      $('#tabs a').click(function (e) {
-        e.preventDefault()
-        $(this).tab('show')
-      })
+            EarthboundText.preload_assets();
 
-      $('#generate').click(function (e) {
-        e.preventDefault();
-        $('.loader').addClass('loading');
-        document.getElementById('image').src = '';
+            var generated = false;
 
-        EarthboundText.render({
-          canvas: document.getElementById('bitmap'),
-          flavor: $('input:radio[name=flavor]:checked').val(),
-          speed: $('input:radio[name=speed]:checked').val(),
-          text: $('#text').val(),
-          on_render: function(blob) {
-            $('#image').attr('src', URL.createObjectURL(blob));
-            $('.loader').removeClass('loading');
-          }
+            currentBlob = null;
+
+            $('#tabs a').click(function (e) {
+                e.preventDefault()
+                $(this).tab('show')
+            })
+
+            $('#generate').click(function (e) {
+                e.preventDefault();
+                $('.loader').addClass('loading');
+                document.getElementById('image').src = '';
+
+                EarthboundText.render({
+                    canvas: document.getElementById('bitmap'),
+                    flavor: $('input:radio[name=flavor]:checked').val(),
+                    speed: $('input:radio[name=speed]:checked').val(),
+                    text: $('#text').val(),
+                    on_render: function(blob) {
+                        currentBlob = blob
+                        $('#image').attr('src', URL.createObjectURL(blob));
+                        $('.loader').removeClass('loading');
+                        generated = true;
+                        $('.actions').removeClass('hidden');
+                    }
+                });
+            });
+
+            $('#save_image').click(function() {
+                var fileName = $('#text').val().substring(0, 32).toLowerCase().replace(/[\W]+/gi, '-') + '.gif';;
+                saveData(currentBlob, fileName);
+            });
+
+            $('#upload_imgur').click(function(e) {
+                e.preventDefault();
+                var w = window.open();
+                var reader = new FileReader();
+                reader.readAsDataURL(currentBlob); 
+                reader.onloadend = function() {
+                    $.ajax({
+                        url: 'https://api.imgur.com/3/image',
+                        type: 'POST',
+                        headers: {
+                            Authorization: 'Client-ID 335c77caef813da'
+                        },
+                        data: {
+                            type: 'base64',
+                            name: 'ebtext.gif',
+                            description: 'Made with EarthBound Text Labs (http://billeager.com/ebtext)\n\n#earthbound #text #gif #ebtextlabs',
+                            image: reader.result.split(',')[1]
+                        },
+                        dataType: 'json'
+                    }).success(function(data) {
+                        var url = 'http://imgur.com/' + data.data.id + '?tags';
+                        w.location.href = url;
+                    }).error(function() {
+                        alert('Could not reach api.imgur.com. Sorry :(');
+                        w.close();
+                    });
+                }
+            });
         });
-      });
-    });
-  </script>
-  <title>EarthBound Text Labs</title>
+    </script>
+    <title>EarthBound Text Labs</title>
 </head>
 <body>
-  <div class="contain">
-    <div class="main">
-      <div class="stage">
-        <div class="loader">
-        </div>
-        <canvas id="bitmap"></canvas>
-        <img id="image" src="images/splash.gif" />
-      </div>
+    <div class="contain">
+        <div class="main">
+            <div class="stage">
+                <div class="loader">
+                </div>
+                <canvas id="bitmap"></canvas>
+                <img id="image" src="images/splash.gif" />
+                <div class="actions hidden">
+                    <button id="save_image" class="btn btn-default">Save <i class="fa fa-floppy-o"></i></button>
+                    <button id="upload_imgur" class="btn btn-default">Upload to Imgur <i class="fa fa-cloud-upload"></i></button>
+                </div>
+            </div>
 
-      <div class="container solid">
-        <ul id="tabs" class="nav nav-tabs">
-          <li class="active"><a href="#home" data-toggle="tab">Make text</a></li>
-          <li><a href="#help" data-toggle="tab">Help</a></li>
-          <li><a href="#about" data-toggle="tab">About</a></li>
-        </ul>
-        <div class="tab-content">
-          <div class="tab-pane active" id="home">
-            <form>
-              <fieldset>
-                <label for="text">Input Text</label>
-                <textarea id="text" name="text" class="form-control" rows="3" placeholder="Enter your text here.
+            <div class="container solid">
+                <ul id="tabs" class="nav nav-tabs">
+                    <li class="active"><a href="#home" data-toggle="tab">Make text</a></li>
+                    <li><a href="#help" data-toggle="tab">Help</a></li>
+                    <li><a href="#about" data-toggle="tab">About</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="home">
+                        <form>
+                            <fieldset>
+                                <label for="text">Input Text</label>
+                                <textarea id="text" name="text" class="form-control" rows="3" placeholder="Enter your text here.
 Backslashes will add\ pauses\\ to\\\ your text.
 See the Help tab for more!"></textarea><br />
-                <label for="speed">Text Speed</label>
-                <div class="btn-group" data-toggle="buttons">
-                  <label class="btn btn-primary active">
-                    <input type="radio" name="speed" checked="checked" value="15" />Fast
-                  </label>
-                  <label class="btn btn-primary">
-                    <input type="radio" name="speed" value="33" />Medium
-                  </label>
-                  <label class="btn btn-primary">
-                    <input type="radio" name="speed" value="50" />Slow
-                  </label>
-                </div><br /><br />
-                <label for="speed">Flavor</label>
-                <div class="btn-group" data-toggle="buttons">
-                  <label class="btn btn-primary active">
-                    <input type="radio" name="flavor" checked="checked" value="plain" />Plain
-                  </label>
-                  <label class="btn btn-primary">
-                    <input type="radio" name="flavor" value="mint" />Mint
-                  </label>
-                  <label class="btn btn-primary">
-                    <input type="radio" name="flavor" value="strawberry" />Strawberry
-                  </label>
-                  <label class="btn btn-primary">
-                    <input type="radio" name="flavor" value="banana" />Banana
-                  </label>
-                  <label class="btn btn-primary">
-                    <input type="radio" name="flavor" value="peanut" />Peanut
-                  </label>
-                </div><br /><br />
-                <button id="generate" class="btn btn-default">Generate</button>
-              </fieldset>
-            </form>
-          </div>
-          <div class="tab-pane" id="help">
-            <h1>EarthBound Text Help</h1>
+                                <label for="speed">Text Speed</label>
+                                <div class="btn-group" data-toggle="buttons">
+                                    <label class="btn btn-primary active">
+                                        <input type="radio" name="speed" checked="checked" value="15" />Fast
+                                    </label>
+                                    <label class="btn btn-primary">
+                                        <input type="radio" name="speed" value="33" />Medium
+                                    </label>
+                                    <label class="btn btn-primary">
+                                        <input type="radio" name="speed" value="50" />Slow
+                                    </label>
+                                </div><br /><br />
+                                <label for="speed">Flavor</label>
+                                <div class="btn-group" data-toggle="buttons">
+                                    <label class="btn btn-primary active">
+                                        <input type="radio" name="flavor" checked="checked" value="plain" />Plain
+                                    </label>
+                                    <label class="btn btn-primary">
+                                        <input type="radio" name="flavor" value="mint" />Mint
+                                    </label>
+                                    <label class="btn btn-primary">
+                                        <input type="radio" name="flavor" value="strawberry" />Strawberry
+                                    </label>
+                                    <label class="btn btn-primary">
+                                        <input type="radio" name="flavor" value="banana" />Banana
+                                    </label>
+                                    <label class="btn btn-primary">
+                                        <input type="radio" name="flavor" value="peanut" />Peanut
+                                    </label>
+                                </div><br /><br />
+                                    <button id="generate" class="btn btn-primary btn-lg">Generate</button>
+                            </fieldset>
+                        </form>
+                    </div>
+                    <div class="tab-pane" id="help">
+                        <h1>EarthBound Text Help</h1>
 
-            <h2>Submitting</h2>
-            <p>If you want to submit your masterpiece, after you generate your Text, save it to your computer and head on over to <a href="http://earthboundtext.tumblr.com/submit">http://earthboundtext.tumblr.com/submit</a>. Submissions are screened for quality and suitability. Please add descriptions of what your text is from in the caption if it's not canon from EarthBound/Mother!</p>
+                        <h2>Submitting</h2>
+                        <p>If you want to submit your masterpiece, after you generate your Text, save it to your computer and head on over to <a href="http://earthboundtext.tumblr.com/submit">http://earthboundtext.tumblr.com/submit</a>. Submissions are screened for quality and suitability. Please add descriptions of what your text is from in the caption if it's not canon from EarthBound/Mother!</p>
 
-            <h2>Input Text</h2>
-            <p>This is the input text, where you put in what you want to have show up in an EarthBound text box.</p>
+                        <h2>Input Text</h2>
+                        <p>This is the input text, where you put in what you want to have show up in an EarthBound text box.</p>
 
-            <h2>Text Speed</h2>
-            <p>This changes the text speed. Your options are Fast, Medium, and Slow. These settings have been rigorously tested to match the pacing of the original game as closely as possible.</p>
+                        <h2>Text Speed</h2>
+                        <p>This changes the text speed. Your options are Fast, Medium, and Slow. These settings have been rigorously tested to match the pacing of the original game as closely as possible.</p>
 
-            <h2>Flavor</h2>
-            <p>This will change the text flavor to one of the flavors available in the game.</p>
+                        <h2>Flavor</h2>
+                        <p>This will change the text flavor to one of the flavors available in the game.</p>
 
-            <h2>Control Codes</h2>
-            <p>EarthBound Text easy. Control codes are interpreted inline and delimited by square brackets ([]). Unknown or irrelevant control codes are dropped automatically. This is meant to provide an easy mechanism to import text from the <a href="http://starmen.net/mother2/gameinfo/script/script.txt" target="_blank">EarthBound Text Dump</a> very easily.</p>
-            <dl>
-              <dt>[LINE]</dt>
-              <dd>This adds a newline.</dd>
-              <dt>[DELAY {0x}]</dt>
-              <dd>This adds a delay in hex form. 01 = short, 0F = longer, FF = you'll be waiting a while.</dd>
-              <dt>[PAUSE]</dt>
-              <dd>This adds a pause. The arrow will flash for a moment, then will continue. Meant to emulate a point in the text when you need to press &lt;A&gt;.</dd>
-              <dt>@</dt>
-              <dd>This adds a &middot; to the start of a line.</dd>
-            </dl>
-          </div>
-          <div class="tab-pane" id="about">
-            <h1>About</h1>
-            <p>EarthBound Text written by <a href="http://bill.tumblr.com" target="_blank">Bill Eager</a>. Uses <a href="https://github.com/jnordberg/gif.js" target="_blank">gif.js</a> technology by Johan Nordberg.</p>
-            <p>This project is not affiliated with Shigesato Itoi, Nintendo, HAL Laboratories, or anyone.</p>
-            <h2>Source code</h2>
-            <p><a href="http://github.com/beager/ebtext/" target="_blank">Source code</a> is available on GitHub, contributions welcome.</p>
-          </div>
+                        <h2>Control Codes</h2>
+                        <p>EarthBound Text easy. Control codes are interpreted inline and delimited by square brackets ([]). Unknown or irrelevant control codes are dropped automatically. This is meant to provide an easy mechanism to import text from the <a href="http://starmen.net/mother2/gameinfo/script/script.txt" target="_blank">EarthBound Text Dump</a> very easily.</p>
+                        <dl>
+                            <dt>[LINE]</dt>
+                            <dd>This adds a newline.</dd>
+                            <dt>[DELAY {0x}]</dt>
+                            <dd>This adds a delay in hex form. 01 = short, 0F = longer, FF = you'll be waiting a while.</dd>
+                            <dt>[PAUSE]</dt>
+                            <dd>This adds a pause. The arrow will flash for a moment, then will continue. Meant to emulate a point in the text when you need to press &lt;A&gt;.</dd>
+                            <dt>@</dt>
+                            <dd>This adds a &middot; to the start of a line.</dd>
+                        </dl>
+                    </div>
+                    <div class="tab-pane" id="about">
+                        <h1>About</h1>
+                        <p>EarthBound Text written by <a href="http://bill.tumblr.com" target="_blank">Bill Eager</a>. Uses <a href="https://github.com/jnordberg/gif.js" target="_blank">gif.js</a> technology by Johan Nordberg.</p>
+                        <p>This project is not affiliated with Shigesato Itoi, Nintendo, HAL Laboratories, or anyone.</p>
+                        <h2>Source code</h2>
+                        <p><a href="http://github.com/beager/ebtext/" target="_blank">Source code</a> is available on GitHub, contributions welcome.</p>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-  </body>
+    </body>
 </html>
