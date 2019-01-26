@@ -1,10 +1,10 @@
 <html>
 <head>
-    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" type="text/css" href="styles/main.css" />
-    <script src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
-    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     <script src="scripts/3rdparty/gif.js/dist/gif.js"></script>
     <script src="scripts/lib/ebtext.js"></script>
     <script>
@@ -65,7 +65,7 @@
                 reader.readAsDataURL(currentBlob); 
                 reader.onloadend = function() {
                     $.ajax({
-                        url: 'https://api.imgur.com/3/image',
+                        url: '//api.imgur.com/3/image',
                         type: 'POST',
                         headers: {
                             Authorization: 'Client-ID 335c77caef813da'
@@ -73,12 +73,12 @@
                         data: {
                             type: 'base64',
                             name: 'ebtext.gif',
-                            description: 'Made with EarthBound Text Labs (https://billeager.com/ebtext)\n\n#earthbound #text #gif #ebtextlabs',
+                            description: 'Made with EarthBound Text Labs (//billeager.com/ebtext)\n\n#earthbound #text #gif #ebtextlabs',
                             image: reader.result.split(',')[1]
                         },
                         dataType: 'json'
                     }).success(function(data) {
-                        var url = 'https://imgur.com/' + data.data.id + '?tags';
+                        var url = '//imgur.com/' + data.data.id + '?tags';
                         w.location.href = url;
                     }).error(function() {
                         alert('Could not reach api.imgur.com. Sorry :(');
