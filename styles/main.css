@@ -1,15 +1,36 @@
 body {
-	background: #000;
+	background: #fff;
+	margin: 0;
+	padding: 0;
+	min-width: 100vw;
+	min-height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.cover {
+	min-height: 100vh;
+	min-width: 100vw;
+	background-image: url(../images/background.png);
+	object-fit: cover;
+	opacity: .3;
+	position: fixed;
+	filter: blur(4px);
+	left: 0;
+	top: 0;
+	z-index: 1;
 }
 
 .contain {
 	background: url(../images/pagebg.png) repeat 0 0;
+	border: 4px solid #000;
 	border-radius: 8px;
-	margin: 16px auto;
 	min-height: 640px;
+	margin: 15px;
 	width: 712px;
-	padding-bottom: 16px;
 	position: relative;
+	z-index: 2;
 }
 
 .main {
