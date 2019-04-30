@@ -144,7 +144,7 @@ var EarthboundText = {
         quality: this.encoder_quality,
         height: this.dialog_height,
         width: this.dialog_width,
-        workerScript: 'scripts/3rdparty/gif.js/dist/gif.worker.js',
+        workerScript: 'scripts/gif.worker.js',
         background: this.encoder_background,
         transparent: this.encoder_transparent
       });  

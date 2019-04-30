@@ -1,6 +1,0 @@
-[submodule "gif.js"]
-	path = gif.js
-	url = git@github.com:jnordberg/gif.js.git
-[submodule "scripts/3rdparty/gif.js"]
-	path = scripts/3rdparty/gif.js
-	url = git@github.com:jnordberg/gif.js.git
