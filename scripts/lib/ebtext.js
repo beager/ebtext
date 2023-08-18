@@ -14,10 +14,10 @@ var EarthboundText = {
 
     // Measurements
     scale:               4,   // 4x magnification
-    dialog_width:        608, // 608px, fix this
-    dialog_height:       256, // fix
-    dialog_asset_width:  960, // fix
-    dialog_asset_height: 256, // fix
+    dialog_width:        1824, // 608px
+    dialog_height:       3034, // 256px
+    dialog_asset_width:  2880, // 960px
+    dialog_asset_height: 404, // 256px
 
     // Text box mechanics
     print_delay: 30, // default
