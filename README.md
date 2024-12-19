@@ -5,7 +5,7 @@ EarthBound Text Generator
 
 EarthBound Text Generator is a lightweight web application that allows you to generate animated dialog boxes in the style of EarthBound, the cult classic Super Nintendo RPG known in Japan as Mother 2, and download those dialog boxes as animated GIF files.
 
-EarthBound Text Generator was written by [Bill Eager](https://billeager.com) and is powered by [gif.js](https://github.com/jnordberg/gif.js) by Johan Nordberg.
+EarthBound Text Generator is written by [Bill Eager](https://billeager.com) and is powered by [gif.js](https://github.com/jnordberg/gif.js) by Johan Nordberg.
 
 EarthBound Text Generator is not affiliated with Shigesato Itoi, Nintendo, or HAL Laboratories.
 
