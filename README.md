@@ -15,7 +15,14 @@ EarthBound Text Generator is not affiliated with Shigesato Itoi, Nintendo, or HA
 
 You can use EarthBound Text Generator by visiting the official website, [https://earthboundtext.com](https://earthboundtext.com).
 
-If you prefer, you can clone this repo and run EarthBound Text Generator locally. You just need to run a static server from the root of the repository—no fancy containerization, compiling, or newfangled build system here, no sir.
+If you prefer, you can clone this repo and run EarthBound Text Generator locally:
+
+```shell
+yarn install
+yarn start
+```
+
+That will run the generator in an `http-server` instance on your local machine.
 
 ## How to develop
 
